@@ -1,4 +1,4 @@
-﻿@model IEnumerable<survey.models.Response>
+﻿@model survey.Models.SurveyViewModel
 
 @{
     ViewData["Title"] = "Survey";
@@ -13,16 +13,19 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Respondent)
+                    Respondent
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Birthdate)
+                    Birthdate
+                </th>
+                <th>
+                    Phone
                 </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Responses) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Respondent)
@@ -31,9 +34,26 @@
                 @Html.DisplayFor(modelItem => item.Birthdate)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Phone.OS)
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<div>
+    <h4>New</h4>
+    @using(Html.BeginForm())
+    {
+                <select>
+                @foreach (var phone in Model.PhoneTypes)
+                {
+                    <option>@phone.OS</option>
+                }
+                </select>
+
+    }
+</div>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using survey.Data;
+using survey.models;
 using survey.Models;
 
 namespace survey.Controllers
@@ -39,8 +40,15 @@ namespace survey.Controllers
 
         public IActionResult Survey()
         {
-            var model = _context.Responses.ToList();
+            var model = new SurveyViewModel(_context.Responses.AsEnumerable());
+
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Survey(Response response)
+        {
+            return RedirectToAction("Survey");
         }
 
         public IActionResult Error()
