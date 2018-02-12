@@ -4,9 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Principal;
 using survey.Data;
 using survey.models;
 using survey.Models;
+using System.Security.Claims;
 
 namespace survey.Controllers
 {
@@ -14,9 +17,28 @@ namespace survey.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        private readonly List<Phone> _phones;
+        private readonly List<SocialNetwork> _socialNetworks;
+
+
         public HomeController(ApplicationDbContext context)
         {
             _context = context;
+
+            _phones = new List<Phone>(){
+                new Phone(){ Id = 1, OS = "iOS" },
+                new Phone(){ Id = 2, OS = "Android" },
+                new Phone(){ Id = 3, OS = "Windows" }
+            };
+
+            _socialNetworks = new List<SocialNetwork>()
+            {
+                new SocialNetwork(){ Id = 1, Name = "Facebook" },
+                new SocialNetwork(){ Id = 2, Name = "Twitter" },
+                new SocialNetwork(){ Id = 3, Name = "Instagram" },
+                new SocialNetwork(){ Id = 4, Name = "Snapchat" },
+                new SocialNetwork(){ Id = 5, Name = "Other" }
+            };
         }
 
         public IActionResult Index()
@@ -38,16 +60,28 @@ namespace survey.Controllers
             return View();
         }
 
-        public IActionResult Survey()
+        public IActionResult Survey(string returnUrl)
         {
+            ViewData["ReturnUrl"] = String.IsNullOrEmpty(returnUrl) ? "/" : returnUrl;
             var model = new SurveyViewModel(_context.Responses.AsEnumerable());
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Survey(Response response)
+        public IActionResult Survey(SurveyViewModel response)
         {
+            var model = new Response();
+
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            model.Respondent = Guid.Parse(user);
+
+            model.Phone = _phones.SingleOrDefault(x => x.Id == response.Phone);
+            model.SocialNetworks = _socialNetworks.Where(s => response.SocialNetworks.Any(sn => sn == s.Id)).ToList();
+
+            _context.Responses.Add(model);
+            _context.SaveChanges();
+            
             return RedirectToAction("Survey");
         }
 

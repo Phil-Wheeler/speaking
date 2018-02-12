@@ -19,7 +19,7 @@
                     Birthdate
                 </th>
                 <th>
-                    Phone
+                    Phone Type
                 </th>
             <th></th>
         </tr>
@@ -46,14 +46,44 @@
 
 <div>
     <h4>New</h4>
-    @using(Html.BeginForm())
-    {
-                <select>
-                @foreach (var phone in Model.PhoneTypes)
-                {
-                    <option>@phone.OS</option>
-                }
-                </select>
-
-    }
+    <form class="form-inline" method="post">
+        <div class="form-group">
+            <label for="Birthdate" class="control-label">Date of birth</label>
+            <input type="date" class="form-control" id="Birthdate" name="Birthdate" placeholder="birthdate">
+        </div>
+        <div class="form-group">
+            <label for="Phone" class="control-label">Phone</label>
+            <select asp-for="Phone" asp-items="Model.Phones" id="Phone" name="Phone">
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="SocialNetworks" class="control-label">Social Networks</label>
+            <select asp-for="SocialNetworks" asp-items="Model.Networks" id="SocialNetworks" name="SocialNetworks">
+            </select>
+        </div>
+        <div>
+            <button type="submit" value="submit">Save</button>
+        </div>
+    </form>
 </div>
+
+
+
+@section Scripts
+{
+<script>
+
+    $(function () {
+
+        $('#Phone option').click(function () {
+            $(this).attr('selected', 'selected');
+        });
+
+        $('#SocialNetworks option').click(function () {
+            $('#SocialNetworks option:not(:selected)').removeAttr('selected');
+            $('#SocialNetworks option:selected').attr('selected', 'selected');
+        });
+
+    })
+</script>
+}

@@ -21,6 +21,6 @@ namespace survey.models
     public class SocialNetwork
     {
         public int Id { get; set; }
-        public int Name { get; set; }
+        public string Name { get; set; }
     }
 }

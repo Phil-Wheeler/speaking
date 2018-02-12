@@ -215,7 +215,7 @@ namespace survey.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = "/")
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)

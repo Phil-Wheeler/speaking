@@ -13,7 +13,7 @@ namespace survey.Models.AccountViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        //[Required]
         [Display(Name = "Phone")]
         public string Phone { get; set; }
 
