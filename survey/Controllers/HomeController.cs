@@ -24,21 +24,6 @@ namespace survey.Controllers
         public HomeController(ApplicationDbContext context)
         {
             _context = context;
-
-            _phones = new List<Phone>(){
-                new Phone(){ Id = 1, OS = "iOS" },
-                new Phone(){ Id = 2, OS = "Android" },
-                new Phone(){ Id = 3, OS = "Windows" }
-            };
-
-            _socialNetworks = new List<SocialNetwork>()
-            {
-                new SocialNetwork(){ Id = 1, Name = "Facebook" },
-                new SocialNetwork(){ Id = 2, Name = "Twitter" },
-                new SocialNetwork(){ Id = 3, Name = "Instagram" },
-                new SocialNetwork(){ Id = 4, Name = "Snapchat" },
-                new SocialNetwork(){ Id = 5, Name = "Other" }
-            };
         }
 
         public IActionResult Index()
@@ -76,8 +61,8 @@ namespace survey.Controllers
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             model.Respondent = Guid.Parse(user);
 
-            model.Phone = _phones.SingleOrDefault(x => x.Id == response.Phone);
-            model.SocialNetworks = _socialNetworks.Where(s => response.SocialNetworks.Any(sn => sn == s.Id)).ToList();
+            model.Phone = _context.Phones.SingleOrDefault(x => x.Id == response.Phone);
+            model.SocialNetworks = _context.SocialNetworks.Where(s => response.SocialNetworks.Any(sn => sn == s.Id)).ToList();
 
             _context.Responses.Add(model);
             _context.SaveChanges();

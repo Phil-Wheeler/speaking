@@ -16,6 +16,8 @@ namespace survey.Data
         { }
 
         public DbSet<Response> Responses { get; set; }
+        public DbSet<Phone> Phones { get; set; }
+        public DbSet<SocialNetwork> SocialNetworks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
